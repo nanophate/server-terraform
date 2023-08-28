@@ -17,6 +17,9 @@
             "Action": [
                 "autoscaling:DescribeScalingActivities",
                 "autoscaling:DescribeAutoScalingGroups"
+				"autoscaling:UpdateAutoScalingGroup",
+				"autoscaling:TerminateInstanceInAutoScalingGroup",
+				"autoscaling:CreateOrUpdateTags"
             ],
             "Resource": "*"
         }
