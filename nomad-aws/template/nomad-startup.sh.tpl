@@ -13,6 +13,9 @@ export INSTANCE_ID
 echo "----------------------------------------"
 echo "        Tuning kernel parameters"
 echo "----------------------------------------"
+# This will sepcify the Kernel to use Cgroup Version: 1
+echo 'GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=0"' >> /etc/default/grub
+
 if [ -f /sys/block/nvme0n1/queue/scheduler ] && grep -q 'mq-deadline' /sys/block/nvme0n1/queue/scheduler
 then
     echo 'mq-deadline' > /sys/block/nvme0n1/queue/scheduler
@@ -38,8 +41,8 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 apt-get install -y "linux-image-$UNAME"
 apt-get update
-apt-get -y install docker-ce=5:20.10.14~3-0~ubuntu-focal \
-                   docker-ce-cli=5:20.10.14~3-0~ubuntu-focal
+apt-get -y install docker-ce=5:20.10.14~3-0~ubuntu-jammy \
+                   docker-ce-cli=5:20.10.14~3-0~ubuntu-jammy
 
 # force docker to use userns-remap to mitigate CVE 2019-5736
 apt-get -y install jq
@@ -235,3 +238,5 @@ docker_chain="DOCKER-USER"
 %{ endfor ~}
 /sbin/iptables --wait --insert $docker_chain 1 -i br+ --destination "${dns_server}" -p tcp --dport 53 --jump RETURN
 /sbin/iptables --wait --insert $docker_chain 2 -i br+ --destination "${dns_server}" -p udp --dport 53 --jump RETURN
+
+reboot

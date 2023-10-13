@@ -167,5 +167,6 @@ variable "machine_image_owners" {
 variable "machine_image_names" {
   type        = list(string)
   description = "Strings to filter image names for nomad virtual machine images."
-  default     = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+# default     = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  default     = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
 }
