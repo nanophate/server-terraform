@@ -31,6 +31,23 @@ echo "--------------------------------------"
 apt-get install -y ntp
 
 echo "--------------------------------------"
+echo "     Initializing instance store"
+echo "--------------------------------------"
+mkfs -t ext2 /dev/nvme1n1
+mkdir -p /local-store
+mount /dev/nvme1n1 /local-store
+
+mkdir -p /local-store/docker /local-store/nomad
+mkdir -p /var/lib/docker /opt/nomad
+
+mount --bind /local-store/docker /var/lib/docker
+mount --bind /local-store/nomad /opt/nomad
+
+echo '/dev/nvme1n1 /local-store ext4 defaults 0 0' >> /etc/fstab
+echo '/local-store/docker /var/lib/docker none defaults,bind 0 0' >> /etc/fstab
+echo '/local-store/nomad /opt/nomad none defaults,bind 0 0' >> /etc/fstab
+
+echo "--------------------------------------"
 echo "        Installing Docker"
 echo "--------------------------------------"
 apt-get install -y apt-transport-https ca-certificates curl software-properties-common
